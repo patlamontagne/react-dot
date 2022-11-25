@@ -1,27 +1,22 @@
-import { DynamicComponent } from "./DynamicComponent";
+import { DotComponent } from "./DotComponent";
 
-export async function createPhpReact({
-    className = "react-component",
-    resolve,
-    setup,
-}) {
-    async function injectComponentToElement(el) {
-        const initialData = JSON.parse(el.dataset.react);
-        const resolveComponent = (name) =>
-            Promise.resolve(resolve(name)).then(
-                (module) => module.default || module
-            );
+export async function createDot(el, resolve, setup) {
+    el.classList.add(`${className}--rendered`);
+    const initialData = JSON.parse(el.dataset.react);
+    const resolveComponent = (name) =>
+        Promise.resolve(resolve(name)).then(
+            (module) => module.default || module
+        );
 
-        // clean up markup
-        el.classList.add(`${className}--rendered`);
-        delete el.dataset.react;
+    // clean up markup
+    el.classList.add(`${className}--rendered`);
+    delete el.dataset.react;
 
-        const reactComponent = await resolveComponent(
-            initialData.component
-        ).then((initialComponent) => {
+    const reactComponent = await resolveComponent(initialData.component).then(
+        (initialComponent) => {
             return setup({
                 el,
-                Component: DynamicComponent,
+                Dot: DotComponent,
                 props: {
                     initialData,
                     initialComponent,
@@ -29,16 +24,18 @@ export async function createPhpReact({
                     resolveComponent,
                 },
             });
-        });
+        }
+    );
 
-        return reactComponent;
-    }
+    return reactComponent;
+}
 
+export async function createDots({ className = "react-dot", resolve, setup }) {
     const elements = [
         ...document.querySelectorAll(
             `.${className}:not(.${className}--rendered)`
         ),
     ];
 
-    return elements.map((el) => injectComponentToElement(el));
+    return elements.map((el) => createDot(el, resolve, setup));
 }

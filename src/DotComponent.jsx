@@ -1,6 +1,6 @@
 import { createElement } from "react";
 
-export function DynamicComponent({ children, initialData, initialComponent }) {
+export function DotComponent({ children, initialData, initialComponent }) {
     if (!initialData.component || initialData.component === "") {
         throw new Error("Missing component name");
     }
