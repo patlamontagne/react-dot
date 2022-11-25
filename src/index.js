@@ -1,4 +1,5 @@
 import { DotComponent } from "./DotComponent";
+import { ErrorComponent } from "./ErrorComponent";
 
 export async function createDot(el, className = "react-dot", resolve, setup) {
     el.classList.add(`${className}--rendered`);
@@ -12,8 +13,8 @@ export async function createDot(el, className = "react-dot", resolve, setup) {
     el.classList.add(`${className}--rendered`);
     delete el.dataset.react;
 
-    const reactComponent = await resolveComponent(initialData.component).then(
-        (initialComponent) => {
+    await resolveComponent(initialData.component)
+        .then((initialComponent) => {
             return setup({
                 el,
                 Dot: DotComponent,
@@ -24,19 +25,24 @@ export async function createDot(el, className = "react-dot", resolve, setup) {
                     resolveComponent,
                 },
             });
-        }
-    );
-
-    return reactComponent;
+        })
+        .catch((error) => {
+            return setup({
+                el,
+                Dot: ErrorComponent,
+                props: {
+                    message: error.toString(),
+                },
+            });
+        });
 }
 
 export async function createDots({ className = "react-dot", resolve, setup }) {
-
     const elements = [
         ...document.querySelectorAll(
             `.${className}:not(.${className}--rendered)`
         ),
     ];
 
-    return elements.map((el) => createDot(el, className, resolve, setup));
+    elements.map((el) => createDot(el, className, resolve, setup));
 }
