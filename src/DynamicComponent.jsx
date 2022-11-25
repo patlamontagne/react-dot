@@ -1,12 +1,8 @@
-import { createElement } from 'react';
+import { createElement } from "react";
 
-export function DynamicComponent({
-    children,
-    initialData,
-    initialComponent,
-}) {
-    if (!initialData.component || initialData.component === '') {
-        throw new Error('Missing component name');
+export function DynamicComponent({ children, initialData, initialComponent }) {
+    if (!initialData.component || initialData.component === "") {
+        throw new Error("Missing component name");
     }
 
     const current = {
@@ -19,7 +15,7 @@ export function DynamicComponent({
     const renderChildren = ({ Component, key, childrenProps = {} }) => {
         const child = createElement(Component, { key, ...childrenProps });
 
-        if (typeof Component.layout === 'function') {
+        if (typeof Component.layout === "function") {
             return Component.layout(child);
         }
 
