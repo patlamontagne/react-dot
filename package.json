@@ -1,5 +1,5 @@
 {
-  "name": "react-dot",
+  "name": "@patlamontagne/react-dot",
   "version": "0.1.0",
   "description": "Render discrete react components from your backend.",
   "author": "Patrick Lamontagne",
