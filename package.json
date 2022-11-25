@@ -1,6 +1,6 @@
 {
   "name": "react-dot",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Render discrete react components from your backend.",
   "author": "Patrick Lamontagne",
   "license": "MIT",
