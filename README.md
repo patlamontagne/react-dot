@@ -4,6 +4,11 @@ While `react-dot` only needs html to work, it is intended to be used along a bac
 
 https://github.com/patlamontagne/react-dot-php
 
+## Installing
+
+```sh
+npm i @patlamontagne/react-dot
+```
 
 ## Usage with React 18
 
