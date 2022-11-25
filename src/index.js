@@ -1,6 +1,6 @@
 import { DotComponent } from "./DotComponent";
 
-export async function createDot(el, resolve, setup) {
+export async function createDot(el, className = "react-dot", resolve, setup) {
     el.classList.add(`${className}--rendered`);
     const initialData = JSON.parse(el.dataset.react);
     const resolveComponent = (name) =>
@@ -31,11 +31,12 @@ export async function createDot(el, resolve, setup) {
 }
 
 export async function createDots({ className = "react-dot", resolve, setup }) {
+
     const elements = [
         ...document.querySelectorAll(
             `.${className}:not(.${className}--rendered)`
         ),
     ];
 
-    return elements.map((el) => createDot(el, resolve, setup));
+    return elements.map((el) => createDot(el, className, resolve, setup));
 }
