@@ -13,8 +13,8 @@ npm i @patlamontagne/react-dot
 ## Usage with React 18
 
 ```jsx
+import { createDots } from "@patlamontagne/react-dot";
 import { createRoot } from "react-dom/client";
-import { createDots } from "react-dot";
 
 createDots({
     resolve: (name) => require(`./components/${name}.jsx`),
