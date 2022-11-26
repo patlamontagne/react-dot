@@ -1,10 +1,6 @@
 import { createElement } from "react";
 
 export function DotComponent({ children, initialData, initialComponent }) {
-    if (!initialData.component || initialData.component === "") {
-        throw new Error("Missing component name");
-    }
-
     const current = {
         component: initialComponent,
         props: initialData.props,
