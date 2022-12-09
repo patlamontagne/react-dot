@@ -18,8 +18,9 @@ https://github.com/patlamontagne/react-dot-php
 npm i @patlamontagne/react-dot
 ```
 
-## Usage with React 18
+## Usage
 
+Initialize the components (example with React 18's createRoot)
 ```jsx
 import { createDots } from "@patlamontagne/react-dot";
 import { createRoot } from "react-dom/client";
@@ -30,6 +31,25 @@ createDots({
         createRoot(el).render(<Dot {...props} />);
     },
 });
+```
+
+```html
+<body>
+    <div data-dot="MyComponent"
+         data-prop-title="Welcome"
+         data-prop-mode="dark"
+         data-prop-list="['foo', 'bar']"
+    >
+        <div>Children content</div>
+    </div>
+</body>
+```
+
+```jsx
+// components/MyComponent.jsx
+export default function MyComponent({ title, mode, list, children }) {
+    // ....
+}
 ```
 
 ## Code splitting (optional)
