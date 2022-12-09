@@ -8,7 +8,7 @@ What does it mean? It means you can add multiple single react components on your
 
 ### Backend adapters
 
-While `react-dot` only needs html to work, it is intended to be used along a backend adapter:
+While `react-dot` only needs html to work, you can use a backend adapter to help you generate the markup it needs to initialize.
 
 https://github.com/patlamontagne/react-dot-php
 
