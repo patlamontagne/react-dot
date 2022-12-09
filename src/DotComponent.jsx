@@ -1,35 +1,33 @@
 import { createElement } from "react";
 
-export function DotComponent({ children, initialData, initialComponent }) {
-    const current = {
-        component: initialComponent,
-        props: initialData.props,
-        children: () => <div dangerouslySetInnerHTML={{ __html: children }} />,
-        key: Date.now(),
-    };
-
-    const renderChildren = ({ Component, key, childrenProps = {} }) => {
-        const child = createElement(Component, { key, ...childrenProps });
-
-        if (typeof Component.layout === "function") {
-            return Component.layout(child);
-        }
-
-        if (Array.isArray(Component.layout)) {
-            return Component.layout
-                .concat(child)
-                .reverse()
-                .reduce((c, Layout) => createElement(Layout, { children: c }));
-        }
-
-        return child;
-    };
-
+export function DotComponent({ initialComponent, initialProps, children }) {
     const Component = createElement(
-        current.component,
-        current.props,
-        renderChildren({ Component: current.children, key: current.key })
+        initialComponent,
+        initialProps,
+        createChildren({
+            Component: () => (
+                <div dangerouslySetInnerHTML={{ __html: children }} />
+            ),
+            key: Date.now(),
+        })
     );
 
     return Component;
+}
+
+function createChildren({ Component, key, childrenProps = {} }) {
+    const child = createElement(Component, { key, ...childrenProps });
+
+    if (typeof Component.layout === "function") {
+        return Component.layout(child);
+    }
+
+    if (Array.isArray(Component.layout)) {
+        return Component.layout
+            .concat(child)
+            .reverse()
+            .reduce((c, Layout) => createElement(Layout, { children: c }));
+    }
+
+    return child;
 }

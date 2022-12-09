@@ -1,28 +1,59 @@
 import { DotComponent } from "./DotComponent";
 import { ErrorComponent } from "./ErrorComponent";
 
-export async function createDot(el, className = "react-dot", resolve, setup) {
-    el.classList.add(`${className}--rendered`);
-    const initialData = JSON.parse(el.dataset.react);
-    const resolveComponent = (name) =>
-        Promise.resolve(resolve(name)).then(
-            (module) => module.default || module
-        );
+function getRootProps(el) {
+    const props = {};
 
-    // clean up markup
-    el.classList.add(`${className}--rendered`);
-    delete el.dataset.react;
+    Object.entries(el.dataset).forEach(([key, value]) => {
+        const nkey = renamePropKey(key);
 
-    await resolveComponent(initialData.component)
+        if (!nkey) return;
+
+        try {
+            value = JSON.parse(value);
+        } catch (e) {
+            //
+        }
+
+        props[nkey] = value;
+    });
+
+    return props;
+}
+
+function getDotRoots() {
+    return [
+        ...document.querySelectorAll(`[data-dot]:not([data-dot-rendered])`),
+    ];
+}
+
+function renamePropKey(key) {
+    let value = key.toString();
+
+    if (value.startsWith("prop")) {
+        value = value.replace(/^prop/i, "");
+        return value.charAt(0).toLowerCase() + value.slice(1);
+    } else {
+        return;
+    }
+}
+
+export async function createDot(el, resolve, setup) {
+    const initialProps = getRootProps(el);
+    const component = el.dataset.dot;
+    el.dataset.dotRendered = true;
+
+    const resolveComponent = (name) => Promise.resolve(resolve(name)).then((module) => module.default || module);
+
+    await resolveComponent(component)
         .then((initialComponent) => {
             return setup({
                 el,
                 Dot: DotComponent,
                 props: {
-                    initialData,
+                    initialProps,
                     initialComponent,
                     children: el.innerHTML,
-                    resolveComponent,
                 },
             });
         })
@@ -37,12 +68,6 @@ export async function createDot(el, className = "react-dot", resolve, setup) {
         });
 }
 
-export async function createDots({ className = "react-dot", resolve, setup }) {
-    const elements = [
-        ...document.querySelectorAll(
-            `.${className}:not(.${className}--rendered)`
-        ),
-    ];
-
-    elements.map((el) => createDot(el, className, resolve, setup));
+export async function createDots({ resolve, setup }) {
+    getDotRoots().map((el) => createDot(el, resolve, setup));
 }
