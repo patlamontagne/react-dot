@@ -1,5 +1,5 @@
-import { DotComponent } from "./DotComponent";
-import { ErrorComponent } from "./ErrorComponent";
+import { DotComponent } from './DotComponent';
+import { ErrorComponent } from './ErrorComponent';
 
 function getRootProps(el) {
     const props = {};
@@ -30,8 +30,8 @@ function getDotRoots() {
 function renamePropKey(key) {
     let value = key.toString();
 
-    if (value.startsWith("prop")) {
-        value = value.replace(/^prop/i, "");
+    if (value.startsWith('prop')) {
+        value = value.replace(/^prop/i, '');
         return value.charAt(0).toLowerCase() + value.slice(1);
     } else {
         return;
@@ -43,7 +43,10 @@ export async function createDot(el, resolve, setup) {
     const component = el.dataset.dot;
     el.dataset.dotRendered = true;
 
-    const resolveComponent = (name) => Promise.resolve(resolve(name)).then((module) => module.default || module);
+    const resolveComponent = (name) =>
+        Promise.resolve(resolve(name)).then(
+            (module) => module.default || module,
+        );
 
     await resolveComponent(component)
         .then((initialComponent) => {
@@ -62,6 +65,7 @@ export async function createDot(el, resolve, setup) {
                 el,
                 Dot: ErrorComponent,
                 props: {
+                    component,
                     message: error.toString(),
                 },
             });
