@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement } from 'react';
 
 export function DotComponent({ initialComponent, initialProps, children }) {
     const Component = createElement(
@@ -9,7 +9,7 @@ export function DotComponent({ initialComponent, initialProps, children }) {
                 <div dangerouslySetInnerHTML={{ __html: children }} />
             ),
             key: Date.now(),
-        })
+        }),
     );
 
     return Component;
@@ -18,7 +18,7 @@ export function DotComponent({ initialComponent, initialProps, children }) {
 function createChildren({ Component, key, childrenProps = {} }) {
     const child = createElement(Component, { key, ...childrenProps });
 
-    if (typeof Component.layout === "function") {
+    if (typeof Component.layout === 'function') {
         return Component.layout(child);
     }
 
@@ -26,7 +26,7 @@ function createChildren({ Component, key, childrenProps = {} }) {
         return Component.layout
             .concat(child)
             .reverse()
-            .reduce((c, Layout) => createElement(Layout, { children: c }));
+            .reduce((c, Layout) => createElement(Layout, {}, c));
     }
 
     return child;
